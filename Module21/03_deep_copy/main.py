@@ -14,14 +14,14 @@ site = {
 }
 
 
+
 def new_sait(info_dict, **kwargs):
     for key, value in kwargs.items():
         if key in info_dict:
             info_dict[key] = value
-            return info_dict
-        for key_info_dict in info_dict.values():
-            if isinstance(key_info_dict, dict):
-                new_sait(key_info_dict, **kwargs)
+    for key_info_dict in info_dict.values():
+        if isinstance(key_info_dict, dict):
+            new_sait(key_info_dict, **kwargs)
     return info_dict
 
 
@@ -39,5 +39,3 @@ def make_sait(passed_site):
 
 result_list_site = make_sait(site)
 print(f'Список ваших сайтов \n{result_list_site}')
-
-
