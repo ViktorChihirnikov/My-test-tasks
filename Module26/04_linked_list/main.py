@@ -1,4 +1,4 @@
-from typing import Optional, Any, Iterable, Iterator
+from typing import Optional, Any, Iterable, Iterator, List
 
 
 class Node:
@@ -81,8 +81,8 @@ class Linkedlist:
     def pop(self, index_value_of_list: int) -> Optional[Any]:
         """
         Метод pop() класса Linkedlist, для удаления узла из списка по индексу.
-        :param index_value_of_list: Int
-        :return: None
+        :param index_value_of_list: Индекс для удаления.
+        :return:  Удалённое значение.
         """
         # Текущий узел
         head_current = self.head
@@ -99,15 +99,15 @@ class Linkedlist:
             # То его удаляем и выходим Удаление происходит через присваивание к self.head = None.
             if head_current.next_num is not None:
                 self.head = head_current.next_num
-                return
+                return head_current.num
             self.head = None
-            return
+            return head_current.num
 
         # Инициализируем переменную last_node для сохранения головы, если предыдущие, условие не сработало.
         last_node = head_current
 
         # Перезаписываем в head_current следующую ссылку так как первый узел не подходит для удаления и далее проверка
-        #   будет произведена с последующего узла в списке, Index увеличен на 1.
+        #   будет произведена с последующего узла в списке, index увеличен на 1.
         head_current, index = head_current.next_num, 1
 
         # Цикл с условием, начинается со второго элемента в списке
@@ -116,18 +116,18 @@ class Linkedlist:
             # Проверка сравнения по индексу
             if index == index_value_of_list:
 
-                # Проверка дает возможность, исключить что узел не имеет ссылку на следующий узел и удаление
+                # Проверка, дает возможность исключить, что узел не имеет ссылку на следующий узел и далее удаление
                 if head_current.next_num is not None:
                     last_node.next_num = head_current.next_num
-                    break
+                    return head_current.num
                 last_node.next_num = None
-                break
+                return head_current.num
             last_node = head_current
             head_current = head_current.next_num
             index += 1
         # Если цикл отработал и не найдено по индексу значение для удаления, то выбрасывается ошибка.
         else:
-            raise LookupError('Не корректный индекс для удаления')
+            print('Не корректный индекс для удаления')
 
 
 
@@ -136,6 +136,7 @@ class Linkedlist:
         Метод iter класса Linkedlist
         :return: Iterator
         """
+        self.head_iter = self.head
         return self
 
 
@@ -146,13 +147,13 @@ class Linkedlist:
         :return: Iterable[Any]
         """
         # Условие для выхода.
-        if self.head is not None:
+        if self.head_iter is not None:
 
             # Берем значение из текущего узла.
-            data_current = self.head.num
+            data_current = self.head_iter.num
 
             # Изменяем голову на следующий узел
-            self.head = self.head.next_num
+            self.head_iter = self.head_iter.next_num
 
             # Возвращаем текущее значение.
             return data_current
@@ -169,40 +170,29 @@ class Linkedlist:
         head_current = self.head
         list_str = ''
         while head_current is not None:
-            if head_current.next_num is None:
-                list_str += str(head_current.num) + ''
-            else:
-                list_str += str(head_current.num) + ' '
+            list_str += str(head_current.num) + ' '
             head_current = head_current.next_num
-        return f'[{list_str}]'
+        return f'[{list_str.rstrip(" ")}]'
 
 
-try:
-    # Создаём объект класса Linkedlist и через метод класса append() добавляем значения.
-    my_list = Linkedlist()
-    my_list.append(10)
-    my_list.append(20)
-    my_list.append(30)
-    my_list.append(50)
+# Создаём объект класса Linkedlist и через метод класса append() добавляем значения.
+my_list = Linkedlist()
+my_list.append(10)
+my_list.append(20)
+my_list.append(30)
+my_list.append(50)
+print('Текущий список', my_list)
+# Удаления значения по индексу.
+print('Удаления значения по индексу', my_list.pop(2))
 
-    # Удаления значения по индексу.
-    my_list.pop(1)
+# Получения значения по индексу.
+print('Получения значения по индексу', my_list.get(0))
 
-    # Получения значения по индексу.
-    print(my_list.get(0))
+# Итерация объекта
+print('Итерация по объекту')
+for values in my_list:
+    print(values, end=' ')
+print()
 
-    # Итерация объекта
-    for value in my_list:
-        print(value, end=' ')
-
-    # Выводит весь список
-    #print(my_list)
-
-except (LookupError, StopIteration) as error:
-    print(error)
-
-else:
-    print(my_list)
-
-
-
+# Выводит весь список
+print('Получившийся список', my_list)
